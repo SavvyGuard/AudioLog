@@ -1,0 +1,7 @@
+RecordIntent begin recording
+RecordIntent record a new log
+RecordIntent begin log
+
+ReplayAllIntent replay all logs
+
+ReplayIntent play log

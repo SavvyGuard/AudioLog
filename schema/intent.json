@@ -1,0 +1,20 @@
+{
+  "intents": [
+    {
+        "intent": "ReplayAllIntent"
+    },
+    {
+        "intent": "ReplayIntent"
+    },
+    {
+        "intent": "RecordIntent"
+    },
+    {
+        "intent": "AMAZON.HelpIntent"
+    },
+    {
+        "intent": "AMAZON.StopIntent"
+    }
+
+  ]
+}
