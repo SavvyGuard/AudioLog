@@ -1,4 +1,4 @@
-import boto
+import boto3 as boto
 from moto import mock_s3
 from mymodule import MyModel
 
@@ -10,10 +10,11 @@ class TestS3Model(unittest.TestCase):
 	"""
 	@mock_s3
 	def setUp(self):
+        self.test_bucket_name = "01"
 		self.test_key_name = "2016-08-05T13:47:30Z"
 		self.test_value = "My name is Michael Weston. I used to be a spy."
-		self.conn = boto.connect_s3()
-		self.conn.create_bucket(test_bucket_name)
+		self.conn = boto.resouce("s3")
+		self.conn.create_bucket(Bucket = test_bucket_name)
 		self.data_model = s3_model.S3Model()
 		self.test_bucket_name = self.data_model.bucket_name
 
