@@ -1,6 +1,7 @@
 import unittest
 import json
-import app
+
+from audiolog import skill
 
 class TestSkill(unittest.TestCase):
 

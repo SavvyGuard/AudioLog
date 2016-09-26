@@ -1,6 +1,6 @@
 import unittest
 
-import journal
+from audiolog import journal
 
 class TestJournalClass(unittest.TestCase):
 
@@ -27,7 +27,7 @@ class TestJournalClass(unittest.TestCase):
         """
             When provided an empty entry do not record
         """
-        with self.assertRaises JournalEntryEmpty as e:
+        with self.assertRaises(JournalEntryEmpty):
             self.journal.record_entry(
                 self.today_datetime, "")
 
@@ -36,7 +36,7 @@ class TestJournalClass(unittest.TestCase):
             Raises error when duplicate time stamps
             entered
         """
-        with self.assertRaises JournalEntryDupe as e:
+        with self.assertRaises(JournalEntryDupe):
             self.journal.record_entry(
                 self.today_datetime, self.test_entry)
             self.journal.record_entry(
