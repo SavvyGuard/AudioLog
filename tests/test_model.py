@@ -11,12 +11,12 @@ class TestS3Model(unittest.TestCase):
 
     @mock_s3
     def setUp(self):
-        self.test_bucket_name = "01"
+        self.test_user_id = "01"
         self.test_key_name = "2016-08-05T13:47:30Z"
         self.test_value = "My name is Michael Weston. I used to be a spy."
-        self.conn = boto.resouce("s3")
-        self.conn.create_bucket(Bucket = test_bucket_name)
-        self.data_model = s3_model.S3Model()
+        self.conn = boto.resource("s3")
+        self.conn.create_bucket(Bucket = s3_model.S3Model.bucket_name)
+        self.data_model = s3_model.S3Model(self.test_user_id)
         self.test_bucket_name = self.data_model.bucket_name
 
     @mock_s3
