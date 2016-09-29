@@ -5,23 +5,31 @@ import unittest
 
 from audiolog import s3_model
 
+
+def set_up_mock():
+    mock = mock_s3()
+    mock.start()
+    client = boto.client("s3")
+    client.create_bucket(Bucket = s3_model.S3Model.bucket_name)
+
+    return mock, client
+
+def tear_down_mock(mock):
+    mock.stop()
+
 class TestS3Model(unittest.TestCase):
     """
     """
-
     def setUp(self):
-        self.mock = mock_s3()
-        self.mock.start()
+        self.mock, self.client = set_up_mock()
         self.test_user_id = "01"
         self.test_key_name = "2016-08-05T13:47:30Z"
         self.test_value = "My name is Michael Weston. I used to be a spy."
         self.test_bucket_name = s3_model.S3Model.bucket_name
-        self.client = boto.client("s3")
-        self.client.create_bucket(Bucket = s3_model.S3Model.bucket_name)
         self.data_model = s3_model.S3Model(self.test_user_id)
 
     def tearDown(self):
-        self.mock.stop()
+        tear_down_mock(self.mock)
 
     def test_get_entry(self):
         self.data_model.save_entry(self.test_key_name, self.test_value)
