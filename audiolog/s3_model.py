@@ -1,4 +1,5 @@
 import boto3 as boto
+import botocore
 
 import unittest
 import s3_model
@@ -10,17 +11,34 @@ class S3Model(object):
     def __init__(self, user_id):
         self.s3_client = boto.client("s3")
         self.s3_folder = user_id + "/"
-
+        self.key_format = "{0}{1}".format(self.s3_folder, "{0}")
         self.entry_list = self.get_entry_list()
 
+
     def get_entry(self, key):
-        pass
+        try:
+            entry = self.s3_client.get_object(
+                Bucket=self.bucket_name,
+                Key=self.key_format.format(key)
+                )["Body"].read()
+        except botocore.exceptions.ClientError as e:
+            raise MissingResource(key, str(e))
+        return entry
 
     def save_entry(self, key, value):
-        pass
+        self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Key=self.key_format.format(key),
+                Body=value)
 
     def remove_entry(self, key):
-        pass
+        try:
+            result = self.s3_client.delete_object(
+                Bucket=self.bucket_name,
+                Key=self.key_format.format(key))["DeleteMarker"]
+        except KeyError as e:
+            return False
+        return result
 
     def get_entry_list(self):
         """
@@ -39,8 +57,17 @@ class S3Model(object):
                 continue
             contents = page["Contents"]
             for content in contents:
-                entry_list.append(content["key"][prefix_len:])
+                entry_list.append(content["Key"][prefix_len:])
+        entry_list.sort(reverse=True)
         return entry_list
 
     def add_to_entry(self, key, addition):
-        pass
+        old_value = self.get_entry(key)
+        self.save_entry(key, old_value + addition)
+
+class MissingResource(Exception):
+   def __init__(self, value, underlying = None):
+       self.value = value
+       self.underlying = underlying
+   def __str__(self):
+       return "Could not find resource: {0}; {1}".format(self.value, self.underlying)

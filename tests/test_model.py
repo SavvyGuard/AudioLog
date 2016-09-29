@@ -28,8 +28,12 @@ class TestS3Model(unittest.TestCase):
 
         self.assertEqual(self.client.get_object(
                     Bucket=self.test_bucket_name,
-                    Key=self.test_key_name)["Body"].read()
+                    Key=self.test_user_id + "/" + self.test_key_name)["Body"].read()
             , self.data_model.get_entry(self.test_key_name))
+
+    def test_get_entry_nonexistent(self):
+        with self.assertRaises(s3_model.MissingResource):
+            self.data_model.get_entry(self.test_key_name)
 
     def test_save_entry(self):
         self.data_model.save_entry(self.test_key_name, self.test_value)
@@ -38,7 +42,8 @@ class TestS3Model(unittest.TestCase):
     def test_remove_entry(self):
         self.data_model.save_entry(self.test_key_name, self.test_value)
         self.data_model.remove_entry(self.test_key_name)
-        self.assertEqual(self.data_model.get_entry(self.test_key_name), None)
+        with self.assertRaises(s3_model.MissingResource):
+            self.data_model.get_entry(self.test_key_name)
 
     def test_get_entry_list(self):
         """
