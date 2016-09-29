@@ -42,5 +42,5 @@ class S3Model(object):
                 entry_list.append(content["key"][prefix_len:])
         return entry_list
 
-    def add_to_entry(self, key):
+    def add_to_entry(self, key, addition):
         pass
