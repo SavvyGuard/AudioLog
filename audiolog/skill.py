@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
 The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
@@ -8,9 +10,8 @@ http://amzn.to/1LGWsLG
 """
 
 import boto
-from __future__ import print_function
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
     etc.) The JSON body of the request is provided in the event parameter.
     """
